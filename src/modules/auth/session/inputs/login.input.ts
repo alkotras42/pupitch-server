@@ -8,18 +8,11 @@ import {
 } from 'class-validator'
 
 @InputType()
-export class CreateUserInput {
+export class LoginInput {
 	@Field()
 	@IsString()
 	@IsNotEmpty()
-	@Matches(/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/)
-	username: string
-
-	@Field()
-	@IsString()
-	@IsNotEmpty()
-	@IsEmail()
-	email: string
+	login: string
 
 	@Field()
 	@IsString()
