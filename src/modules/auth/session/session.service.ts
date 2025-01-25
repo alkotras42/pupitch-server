@@ -36,7 +36,7 @@ export class SessionService {
 			throw new InternalServerErrorException('User not found')
 		}
 
-		const keys = await this.redisService.get('*')
+		const keys = await this.redisService.keys('*')
 
 		const userSessions = []
 
@@ -56,14 +56,14 @@ export class SessionService {
 
 		userSessions.sort((a, b) => b.createdAt - a.createdAt)
 
-		return userSessions.filter(session => session.userId === userId)
+		return userSessions.filter(session => session.id !== req.session.id)
 	}
 
 	async findCurrent(req: Request) {
 		const sessionId = req.session.id
 
 		const sessionData = await this.redisService.get(
-			`${this.configService.getOrThrow<string>('SESSION_FOLDER')}:${sessionId}`
+			`${this.configService.getOrThrow<string>('SESSION_FOLDER')}${sessionId}`
 		)
 
 		const session = JSON.parse(sessionData)
@@ -109,6 +109,8 @@ export class SessionService {
 					return reject(new InternalServerErrorException(err))
 				}
 
+				console.log(sessionMetadata)
+
 				resolve(user)
 			})
 		})
@@ -143,7 +145,7 @@ export class SessionService {
 			)
 		}
 		await this.redisService.del(
-			`${this.configService.getOrThrow<string>('SESSION_FOLDER')}:${sessionId}`
+			`${this.configService.getOrThrow<string>('SESSION_FOLDER')}${sessionId}`
 		)
 
 		return true

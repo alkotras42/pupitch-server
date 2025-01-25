@@ -45,6 +45,7 @@ export class SessionMetadataModel implements SessionMetadata {
 	ip: string
 }
 
+@ObjectType()
 export class SessionModel {
 	@Field(() => ID)
 	id: string
@@ -52,8 +53,8 @@ export class SessionModel {
 	@Field(() => String)
 	userId: string
 
-	@Field(() => Date)
-	createdAt: Date
+	@Field(() => String)
+	createdAt: string
 
 	@Field(() => SessionMetadataModel)
 	metadata: SessionMetadataModel
