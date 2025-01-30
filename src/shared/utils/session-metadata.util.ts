@@ -1,4 +1,3 @@
-import { count } from 'console'
 import type { Request } from 'express'
 import { lookup } from 'geoip-lite'
 import * as countries from 'i18n-iso-countries'
