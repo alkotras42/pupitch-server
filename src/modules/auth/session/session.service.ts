@@ -1,4 +1,5 @@
 import {
+	BadRequestException,
 	Injectable,
 	InternalServerErrorException,
 	NotFoundException,
@@ -14,13 +15,15 @@ import { getSessionMetadata } from '@/src/shared/utils/session-metadata.util'
 import { destroySession, saveSession } from '@/src/shared/utils/session.util'
 
 import { LoginInput } from './inputs/login.input'
+import { VerificationService } from '../verification/verification.service'
 
 @Injectable()
 export class SessionService {
 	public constructor(
 		private readonly prismaService: PrismaService,
 		private readonly redisService: RedisService,
-		private readonly configService: ConfigService
+		private readonly configService: ConfigService,
+		private readonly verificationService: VerificationService
 	) {}
 
 	/**
@@ -96,6 +99,12 @@ export class SessionService {
 
 		if (!isValidPassword) {
 			throw new UnauthorizedException('Invalid password')
+		}
+
+		if(!user.isEmailVerified) {
+			await this.verificationService.sendVerificationToken(user)
+
+			throw new BadRequestException('Email not verified. Please check your email for a verification link.')
 		}
 
 		const sessionMetadata = getSessionMetadata(req, userAgent)
