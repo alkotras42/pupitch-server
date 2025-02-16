@@ -36,9 +36,16 @@ type Mutation {
   createUser(data: CreateUserInput!): Boolean!
   loginUser(data: LoginInput!): UserModel!
   logoutUser: Boolean!
+  newPassword(data: NewPasswordInput!): Boolean!
   removeSession(sessionId: String!): Boolean!
   resetPassword(data: ResetPasswordInput!): Boolean!
   verifyAccount(input: VerificationInput!): UserModel!
+}
+
+input NewPasswordInput {
+  confirmPassword: String!
+  password: String!
+  token: String!
 }
 
 type Query {
