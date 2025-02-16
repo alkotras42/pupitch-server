@@ -68,7 +68,6 @@ export class VerificationService {
 			this.prisma,
 			user,
 			TokenType.EMAIL_VERIFY,
-			true
 		)
 
 		await this.mail.sendVerificationToken(
