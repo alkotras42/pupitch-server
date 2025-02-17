@@ -37,6 +37,12 @@ export class UserModel implements User {
 	@Field(() => String, { nullable: true })
 	totpSecret: string
 
+	@Field(() => Boolean)
+	isDeactivated: boolean
+
+	@Field(() => Date, { nullable: true })
+	deactivatedAt: Date
+
 	@Field(() => Date)
 	createdAt: Date
 

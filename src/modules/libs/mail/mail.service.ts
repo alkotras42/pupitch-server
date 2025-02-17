@@ -6,6 +6,7 @@ import { Session } from 'inspector'
 
 import { SessionMetadata } from '@/src/shared/types/session-metadata.types'
 
+import { DeactivateTemplate } from './templates/deactivate.template'
 import { PasswordRecoveryTemplate } from './templates/password-recovery.template'
 import { VerificationTemplate } from './templates/verification.template'
 
@@ -44,5 +45,15 @@ export class MailService {
 			subject,
 			html
 		})
+	}
+
+	async sendDeactivateToken(
+		email: string,
+		token: string,
+		metadata: SessionMetadata
+	) {
+		const html = await render(DeactivateTemplate({ token, metadata }))
+
+		return this.sendMail(email, 'Account deactivation', html)
 	}
 }

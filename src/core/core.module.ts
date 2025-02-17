@@ -14,6 +14,7 @@ import { PrismaModule } from './prisma/prisma.module'
 import { RedisModule } from './redis/redis.module'
 import { PasswordRecoveryModule } from '../modules/auth/password-recovery/password-recovery.module'
 import { TotpModule } from '../modules/auth/totp/totp.module'
+import { DeactivateModule } from '../modules/auth/deactivate/deactivate.module'
 
 @Module({
 	imports: [
@@ -35,6 +36,7 @@ import { TotpModule } from '../modules/auth/totp/totp.module'
 		VerificationModule,
 		PasswordRecoveryModule,
 		TotpModule,
+		DeactivateModule,
 	]
 })
 export class CoreModule {}
