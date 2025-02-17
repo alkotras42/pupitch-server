@@ -8,14 +8,16 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { verify } from 'argon2'
 import { type Request } from 'express'
+import { TOTP } from 'otpauth'
 
 import { PrismaService } from '@/src/core/prisma/prisma.service'
 import { RedisService } from '@/src/core/redis/redis.service'
 import { getSessionMetadata } from '@/src/shared/utils/session-metadata.util'
 import { destroySession, saveSession } from '@/src/shared/utils/session.util'
 
-import { LoginInput } from './inputs/login.input'
 import { VerificationService } from '../verification/verification.service'
+
+import { LoginInput } from './inputs/login.input'
 
 @Injectable()
 export class SessionService {
@@ -79,7 +81,7 @@ export class SessionService {
 	}
 
 	async login(req: Request, loginInput: LoginInput, userAgent: string) {
-		const { login, password } = loginInput
+		const { login, password, pin } = loginInput
 		const user = await this.prismaService.user.findFirst({
 			where: {
 				OR: [
@@ -101,10 +103,35 @@ export class SessionService {
 			throw new UnauthorizedException('Invalid password')
 		}
 
-		if(!user.isEmailVerified) {
+		if (!user.isEmailVerified) {
 			await this.verificationService.sendVerificationToken(user)
 
-			throw new BadRequestException('Email not verified. Please check your email for a verification link.')
+			throw new BadRequestException(
+				'Email not verified. Please check your email for a verification link.'
+			)
+		}
+
+		if (user.isTotpEnabled) {
+			if (!pin) {
+				return {
+					message: 'Please enter your TOTP code'
+				}
+			}
+			const totp = new TOTP({
+				issuer: 'Pupitch',
+				label: `${user.email}`,
+				algorithm: 'SHA1',
+				digits: 6,
+				secret: user.totpSecret
+			})
+
+			const delta = totp.validate({
+				token: pin
+			})
+
+			if (delta === null) {
+				throw new BadRequestException('Invalid PIN')
+			}
 		}
 
 		const sessionMetadata = getSessionMetadata(req, userAgent)

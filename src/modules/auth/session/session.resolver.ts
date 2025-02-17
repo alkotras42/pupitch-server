@@ -5,6 +5,7 @@ import { Authorization } from '@/src/shared/decorators/auth.decorator'
 import { UserAgent } from '@/src/shared/decorators/user-agent.decorator'
 import type { GqlContext } from '@/src/shared/types/gql-context.types'
 
+import { AuthModel } from '../account/models/auth.model'
 import { UserModel } from '../account/models/user.model'
 
 import { LoginInput } from './inputs/login.input'
@@ -27,7 +28,7 @@ export class SessionResolver {
 		return this.sessionService.findCurrent(req)
 	}
 
-	@Mutation(() => UserModel, { name: 'loginUser' })
+	@Mutation(() => AuthModel, { name: 'loginUser' })
 	async login(
 		@Context() { req }: GqlContext,
 		@Args('data') input: LoginInput,

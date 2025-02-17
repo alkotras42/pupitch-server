@@ -13,6 +13,7 @@ import { getGraphQLConfig } from './config/graphql.config'
 import { PrismaModule } from './prisma/prisma.module'
 import { RedisModule } from './redis/redis.module'
 import { PasswordRecoveryModule } from '../modules/auth/password-recovery/password-recovery.module'
+import { TotpModule } from '../modules/auth/totp/totp.module'
 
 @Module({
 	imports: [
@@ -33,6 +34,7 @@ import { PasswordRecoveryModule } from '../modules/auth/password-recovery/passwo
 		MailModule,
 		VerificationModule,
 		PasswordRecoveryModule,
+		TotpModule,
 	]
 })
 export class CoreModule {}
