@@ -24,7 +24,17 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Pupitch server is a server for the Pupitch app, that allow users to start, watch and manage live broadcasts, chat with other users and more.
+
+## Technologies used
+- NestJS as a framework
+- PrismaDB as a ORM
+- Redis for cache database
+- PostgresQL for database
+- GraphQL as a query language
+- Docker for containerization
+- TOTP for 2FA
+
 
 ## Installation
 
