@@ -6,6 +6,7 @@ import { Session } from 'inspector'
 
 import { SessionMetadata } from '@/src/shared/types/session-metadata.types'
 
+import { AccountDeleteion } from './templates/account-deletion.template'
 import { DeactivateTemplate } from './templates/deactivate.template'
 import { PasswordRecoveryTemplate } from './templates/password-recovery.template'
 import { VerificationTemplate } from './templates/verification.template'
@@ -55,5 +56,13 @@ export class MailService {
 		const html = await render(DeactivateTemplate({ token, metadata }))
 
 		return this.sendMail(email, 'Account deactivation', html)
+	}
+
+	async sendDeletionMessage(email: string) {
+		const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGINS')
+
+		const html = await render(AccountDeleteion({ domain }))
+
+		return this.sendMail(email, 'Account deletion', html)
 	}
 }

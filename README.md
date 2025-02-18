@@ -29,11 +29,12 @@ Pupitch server is a server for the Pupitch app, that allow users to start, watch
 ## Technologies used
 - NestJS as a framework
 - PrismaDB as a ORM
-- Redis for cache database
+- Redis for session storage
 - PostgresQL for database
 - GraphQL as a query language
 - Docker for containerization
 - TOTP for 2FA
+- CRON for scheduled tasks
 
 
 ## Installation
