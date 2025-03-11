@@ -25,6 +25,9 @@ export class AccountService {
 		const user = await this.prismaService.user.findUnique({
 			where: {
 				id: userId
+			},
+			include: {
+				socialLinks: true
 			}
 		})
 

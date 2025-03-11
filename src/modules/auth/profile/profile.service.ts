@@ -8,6 +8,7 @@ import { PrismaService } from '@/src/core/prisma/prisma.service'
 import { StorageService } from '../../libs/storage/storage.service'
 
 import { ChangeProfileInfoInput } from './inputs/change-profile-info.input'
+import { SocialLinkInput } from './inputs/social-link.input'
 
 @Injectable()
 export class ProfileService {
@@ -76,21 +77,21 @@ export class ProfileService {
 		return true
 	}
 
-    /**
-     * Change info in user's profile
-     * @param user - The user whose profile is being updated.
-     * @param input - The input data for updating the user's profile.
-     */
+	/**
+	 * Change info in user's profile
+	 * @param user - The user whose profile is being updated.
+	 * @param input - The input data for updating the user's profile.
+	 */
 	async changeInfo(user: User, input: ChangeProfileInfoInput) {
 		const { displayName, username, bio } = input
 
-        const isUsernameExist = await this.prismaService.user.findUnique({
-            where: { username }
-        })
+		const isUsernameExist = await this.prismaService.user.findUnique({
+			where: { username }
+		})
 
-        if (isUsernameExist && username !== user.username) {
-            throw new ConflictException('Username is already taken')
-        }
+		if (isUsernameExist && username !== user.username) {
+			throw new ConflictException('Username is already taken')
+		}
 
 		await this.prismaService.user.update({
 			where: { id: user.id },
@@ -101,6 +102,63 @@ export class ProfileService {
 			}
 		})
 
-        return true
+		return true
+	}
+
+	async createSocialLink(user: User, input: SocialLinkInput) {
+		const { title, url } = input
+
+		await this.prismaService.socialLink.create({
+			data: {
+				title,
+				url,
+				user: {
+					connect: {
+						id: user.id
+					}
+				}
+			}
+		})
+
+		return true
+	}
+
+	async findSocialLinks(user: User) {
+		const socialLinks = await this.prismaService.socialLink.findMany({
+			where: {
+				userId: user.id
+			},
+			orderBy: {
+				createdAt: 'desc'
+			}
+		})
+
+		return socialLinks
+	}
+
+	async updateSocialLink(id: string, input: SocialLinkInput) {
+		const { title, url } = input
+
+		await this.prismaService.socialLink.update({
+			where: {
+				id
+			},
+			data: {
+				title,
+				url
+			}
+		})
+
+		return true
+	}
+
+	async deleteSocialLink(id: string) {
+		await this.prismaService.socialLink.delete({
+			where: {
+				id
+			}
+		})
+
+		return true
 	}
 }

@@ -69,16 +69,20 @@ type Mutation {
   changeProfileAvatar(avatar: Upload!): Boolean!
   changeProfileInfo(data: ChangeProfileInfoInput!): Boolean!
   clearessionCookie: Boolean!
+  createSocialLinks(data: SocialLinkInput!): Boolean!
   createUser(data: CreateUserInput!): Boolean!
   deactivateAccount(input: DeactivateAccountInput!): AuthModel!
+  deleteSocialLinks(id: String!): Boolean!
   disableTotp: Boolean!
   enableTotp(data: EnableTotpInput!): Boolean!
+  findSocialLinks: [SocialLinkModel!]!
   loginUser(data: LoginInput!): AuthModel!
   logoutUser: Boolean!
   newPassword(data: NewPasswordInput!): Boolean!
   removeProfileAvatar: Boolean!
   removeSession(sessionId: String!): Boolean!
   resetPassword(data: ResetPasswordInput!): Boolean!
+  updateSocialLinks(data: SocialLinkInput!, id: String!): Boolean!
   verifyAccount(input: VerificationInput!): UserModel!
 }
 
@@ -112,6 +116,20 @@ type SessionModel {
   userId: String!
 }
 
+input SocialLinkInput {
+  title: String!
+  url: String!
+}
+
+type SocialLinkModel {
+  createdAt: DateTime!
+  id: ID!
+  title: String!
+  updatedAt: DateTime!
+  url: String!
+  userId: String!
+}
+
 type TotpModel {
   qrcodeUrl: String!
   secret: String!
@@ -133,6 +151,7 @@ type UserModel {
   isTotpEnabled: Boolean!
   isVerified: Boolean!
   password: String!
+  socialLinks: [SocialLinkModel!]
   totpSecret: String
   updatedAt: DateTime!
   username: String!
