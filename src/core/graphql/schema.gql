@@ -50,6 +50,12 @@ input EnableTotpInput {
   secret: String!
 }
 
+input FiltresInput {
+  searchTeam: String
+  skip: Float
+  take: Float
+}
+
 type LocationModel {
   city: String!
   country: String!
@@ -75,7 +81,6 @@ type Mutation {
   deleteSocialLinks(id: String!): Boolean!
   disableTotp: Boolean!
   enableTotp(data: EnableTotpInput!): Boolean!
-  findSocialLinks: [SocialLinkModel!]!
   loginUser(data: LoginInput!): AuthModel!
   logoutUser: Boolean!
   newPassword(data: NewPasswordInput!): Boolean!
@@ -93,9 +98,12 @@ input NewPasswordInput {
 }
 
 type Query {
+  findAllStreams(filters: FiltresInput!): [StreamModel!]!
   findCurrentSessions: SessionModel!
   findMe: UserModel!
+  findRandomStreams: [StreamModel!]!
   findSessionsByUser: [SessionModel!]!
+  findSocialLinks: [SocialLinkModel!]!
   generateTotpSecret: TotpModel!
 }
 
@@ -130,6 +138,20 @@ type SocialLinkModel {
   userId: String!
 }
 
+type StreamModel {
+  createdAt: DateTime!
+  id: ID!
+  ingressId: String
+  isLive: Boolean!
+  serverUrl: String
+  streamKey: String
+  thumbnailUrl: String
+  title: String!
+  updatedAt: DateTime!
+  user: UserModel!
+  userId: String!
+}
+
 type TotpModel {
   qrcodeUrl: String!
   secret: String!
@@ -152,6 +174,7 @@ type UserModel {
   isVerified: Boolean!
   password: String!
   socialLinks: [SocialLinkModel!]
+  stream: StreamModel!
   totpSecret: String
   updatedAt: DateTime!
   username: String!

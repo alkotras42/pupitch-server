@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import * as GraphqlUpload from 'graphql-upload/GraphQLUpload.js'
 import * as Upload from 'graphql-upload/Upload.js'
 
@@ -51,7 +51,7 @@ export class ProfileResolver {
 	}
 
 	@Authorization()
-	@Mutation(() => [SocialLinkModel], { name: 'findSocialLinks' })
+	@Query(() => [SocialLinkModel], { name: 'findSocialLinks' })
 	async findSocialLinks(@authorized() user: User) {
 		return this.profileService.findSocialLinks(user)
 	}

@@ -2,7 +2,6 @@ import { MailerService } from '@nestjs-modules/mailer'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { render } from '@react-email/components'
-import { Session } from 'inspector'
 
 import { SessionMetadata } from '@/src/shared/types/session-metadata.types'
 

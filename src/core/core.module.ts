@@ -18,6 +18,7 @@ import { IS_DEV_ENV } from '../shared/utils/is-dev.util'
 import { getGraphQLConfig } from './config/graphql.config'
 import { PrismaModule } from './prisma/prisma.module'
 import { RedisModule } from './redis/redis.module'
+import { StreamModule } from '../modules/stream/stream.module'
 
 @Module({
 	imports: [
@@ -42,7 +43,8 @@ import { RedisModule } from './redis/redis.module'
 		DeactivateModule,
 		CronModule,
 		StorageModule,
-		ProfileModule
+		ProfileModule,
+		StreamModule,
 	]
 })
 export class CoreModule {}
