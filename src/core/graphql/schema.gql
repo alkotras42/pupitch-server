@@ -22,6 +22,11 @@ input ChangeProfileInfoInput {
   username: String!
 }
 
+input ChangeStreamInfoInput {
+  categoryId: String
+  title: String!
+}
+
 input CreateUserInput {
   email: String!
   password: String!
@@ -74,6 +79,8 @@ type Mutation {
   changePassword(input: ChangePasswordInput!): Boolean!
   changeProfileAvatar(avatar: Upload!): Boolean!
   changeProfileInfo(data: ChangeProfileInfoInput!): Boolean!
+  changeStreamInfo(input: ChangeStreamInfoInput!): Boolean!
+  changeStreamThumbnail(thumbnail: Upload!): Boolean!
   clearessionCookie: Boolean!
   createSocialLinks(data: SocialLinkInput!): Boolean!
   createUser(data: CreateUserInput!): Boolean!
@@ -86,6 +93,7 @@ type Mutation {
   newPassword(data: NewPasswordInput!): Boolean!
   removeProfileAvatar: Boolean!
   removeSession(sessionId: String!): Boolean!
+  removeStreamThumbnail: Boolean!
   resetPassword(data: ResetPasswordInput!): Boolean!
   updateSocialLinks(data: SocialLinkInput!, id: String!): Boolean!
   verifyAccount(input: VerificationInput!): UserModel!

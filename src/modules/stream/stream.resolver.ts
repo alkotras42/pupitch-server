@@ -1,5 +1,13 @@
-import { Args, Query, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import * as GraphqlUpload from 'graphql-upload/GraphQLUpload.js'
+import * as Upload from 'graphql-upload/Upload.js'
 
+import { User } from '@/prisma/generated'
+import { Authorization } from '@/src/shared/decorators/auth.decorator'
+import { authorized } from '@/src/shared/decorators/authorized.decorator'
+import { FileValidationPipe } from '@/src/shared/pipes/file-validation.pipe'
+
+import { ChangeStreamInfoInput } from './input/change-stream-info.inputs'
 import { FiltresInput } from './input/filters.input'
 import { StreamModel } from './models/stream.module'
 import { StreamService } from './stream.service'
@@ -16,5 +24,30 @@ export class StreamResolver {
 	@Query(() => [StreamModel], { name: 'findRandomStreams' })
 	async findRandom() {
 		return this.streamService.findRandom()
+	}
+
+	@Authorization()
+	@Mutation(() => Boolean, { name: 'changeStreamInfo' })
+	async changeInfo(
+		@authorized() user: User,
+		@Args('input') input: ChangeStreamInfoInput
+	) {
+		return this.streamService.updateInfo(user, input)
+	}
+
+	@Authorization()
+	@Mutation(() => Boolean, { name: 'changeStreamThumbnail' })
+	async changeThumbnail(
+		@authorized() user: User,
+		@Args('thumbnail', { type: () => GraphqlUpload }, FileValidationPipe)
+		file: Upload
+	) {
+		return this.streamService.changeThumbnail(user, file)
+	}
+
+	@Authorization()
+	@Mutation(() => Boolean, { name: 'removeStreamThumbnail' })
+	async removeThumbnail(@authorized() user: User) {
+		return this.streamService.removeThumbnail(user)
 	}
 }
