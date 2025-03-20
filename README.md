@@ -35,6 +35,7 @@ Pupitch server is a server for the Pupitch app, that allow users to start, watch
 - Docker for containerization
 - TOTP for 2FA
 - CRON for scheduled tasks
+- Livekit
 
 
 ## Installation

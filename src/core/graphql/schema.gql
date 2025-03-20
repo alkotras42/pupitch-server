@@ -82,6 +82,7 @@ type Mutation {
   changeStreamInfo(input: ChangeStreamInfoInput!): Boolean!
   changeStreamThumbnail(thumbnail: Upload!): Boolean!
   clearessionCookie: Boolean!
+  createIngress(ingressType: Float!): Boolean!
   createSocialLinks(data: SocialLinkInput!): Boolean!
   createUser(data: CreateUserInput!): Boolean!
   deactivateAccount(input: DeactivateAccountInput!): AuthModel!
