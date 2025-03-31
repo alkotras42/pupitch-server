@@ -1,5 +1,7 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import * as Upload from 'graphql-upload/Upload.js'
+import { AccessToken } from 'livekit-server-sdk'
 import * as sharp from 'sharp'
 
 import type { Prisma, User } from '@/prisma/generated'
@@ -9,12 +11,14 @@ import { StorageService } from '../libs/storage/storage.service'
 
 import { ChangeStreamInfoInput } from './input/change-stream-info.inputs'
 import { FiltresInput } from './input/filters.input'
+import { GenerateStreamTokenInput } from './input/generate-stream-token.input'
 
 @Injectable()
 export class StreamService {
 	constructor(
 		private readonly prismaService: PrismaService,
-		private readonly storageService: StorageService
+		private readonly storageService: StorageService,
+		private readonly configService: ConfigService
 	) {}
 
 	async findAll(input: FiltresInput = {}) {
@@ -139,6 +143,59 @@ export class StreamService {
 		})
 
 		return true
+	}
+
+	async generateStreamToken(input: GenerateStreamTokenInput) {
+		const { userId, channelId } = input
+
+		let self: { id: string; username: string }
+
+		const user = await this.prismaService.user.findUnique({
+			where: {
+				id: userId
+			}
+		})
+
+		if (user) {
+			self = {
+				id: user.id,
+				username: user.username
+			}
+		} else {
+			self = {
+				id: userId,
+				username: `User ${Math.floor(Math.random() * 1000000)}`
+			}
+		}
+
+		const channel = await this.prismaService.stream.findUnique({
+			where: {
+				id: channelId
+			}
+		})
+
+		if (!channel) {
+			throw new NotFoundException('Channel not found')
+		}
+
+		const isStreamer = self.id === channel.id
+
+		const token = new AccessToken(
+			this.configService.getOrThrow<string>('LIVEKIT_API_KEY'),
+			this.configService.getOrThrow<string>('LIVEKIT_API_SECRET'),
+			{
+				identity: isStreamer ? `Host-${self.id}` : self.id.toString(),
+				name: self.username
+			}
+		)
+
+		token.addGrant({
+			room: channel.id,
+			roomJoin: true,
+			canPublish: false
+		})
+
+		return { token: token.toJwt() }
 	}
 
 	private async findStreamByUserId(user: User) {
