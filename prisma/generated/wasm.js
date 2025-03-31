@@ -154,6 +154,7 @@ exports.Prisma.StreamScalarFieldEnum = {
   isLive: 'isLive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  categoryId: 'categoryId',
   userId: 'userId'
 };
 
@@ -165,6 +166,16 @@ exports.Prisma.TokenScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId'
+};
+
+exports.Prisma.CategoryScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  slug: 'slug',
+  description: 'description',
+  thumbnailUrl: 'thumbnailUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -191,7 +202,8 @@ exports.Prisma.ModelName = {
   User: 'User',
   SocialLink: 'SocialLink',
   Stream: 'Stream',
-  Token: 'Token'
+  Token: 'Token',
+  Category: 'Category'
 };
 
 /**

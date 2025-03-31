@@ -23,6 +23,7 @@ import { getGraphQLConfig } from './config/graphql.config'
 import { getLivekitConfig } from './config/livekit.config'
 import { PrismaModule } from './prisma/prisma.module'
 import { RedisModule } from './redis/redis.module'
+import { CategoryModule } from '../modules/category/category.module'
 
 @Module({
 	imports: [
@@ -55,7 +56,8 @@ import { RedisModule } from './redis/redis.module'
 		ProfileModule,
 		StreamModule,
 		IngressModule,
-		WebhookModule
+		WebhookModule,
+		CategoryModule,
 	]
 })
 export class CoreModule {}

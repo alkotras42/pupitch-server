@@ -79,16 +79,21 @@ model Stream {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("streams")
+  category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  String? @map("category_id")
 
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String? @unique @map("user_id")
+
+  @@map("streams")
+
+
 }
 
 model Token {
   id        String      @id @default(cuid())
 
-  token String @unique
+  token     String @unique
 
   type TokenType
 
@@ -97,10 +102,25 @@ model Token {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("tokens")
-
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String? @map("user_id")
+
+  @@map("tokens")
+}
+
+model Category {
+  id            String      @id @default(cuid())
+
+  title         String
+  slug          String @unique
+  description   String?
+  thumbnailUrl  String? @map("thumbnail_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  streams Stream[]
+
+  @@map("categories")
 }
 
 enum TokenType {
