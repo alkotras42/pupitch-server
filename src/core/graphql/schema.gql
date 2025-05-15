@@ -12,7 +12,7 @@ type CategoryModel {
   description: String
   id: ID!
   slug: String!
-  streams: [StreamModel!]!
+  streams: [StreamModel!]
   thumbnailUrl: String
   title: String!
   updatedAt: DateTime!

@@ -21,7 +21,7 @@ export class CategoryModel implements Category {
 	@Field(() => String, { nullable: true })
 	thumbnailUrl: string
 
-	@Field(() => [StreamModel])
+	@Field(() => [StreamModel], { nullable: true })
 	streams: StreamModel[]
 
 	@Field(() => Date)

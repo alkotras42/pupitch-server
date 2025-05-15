@@ -10,6 +10,14 @@ export class CategoryService {
 		return this.prismaService.category.findMany({
 			orderBy: {
 				createdAt: 'desc'
+			},
+			include: {
+				streams: {
+					include: {
+						user: true,
+						category: true
+					}
+				}
 			}
 		})
 	}
@@ -24,6 +32,14 @@ export class CategoryService {
 			take: 7,
 			orderBy: {
 				createdAt: 'desc'
+			},
+			include: {
+				streams: {
+					include: {
+						user: true,
+						category: true
+					}
+				}
 			}
 		})
 
