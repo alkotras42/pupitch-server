@@ -128,9 +128,12 @@ input NewPasswordInput {
 }
 
 type Query {
+  findAllCategories: [CategoryModel!]!
   findAllStreams(filters: FiltresInput!): [StreamModel!]!
+  findCategoryBySlug(input: String!): CategoryModel!
   findCurrentSessions: SessionModel!
   findMe: UserModel!
+  findRadndomCategories: [CategoryModel!]!
   findRandomStreams: [StreamModel!]!
   findSessionsByUser: [SessionModel!]!
   findSocialLinks: [SocialLinkModel!]!
